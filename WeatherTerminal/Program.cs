@@ -14,15 +14,9 @@ partial class Program
         {
             Console.WriteLine(item);
         }
-        Console.WriteLine("\nPress enter to exit.");
+        Console.ReadLine();
      }
 
-    /// <summary>
-    /// Initial function that is always called on program start.
-    /// Data Class:
-    /// Set username and location with init;
-    /// Set lon and lat with GeoLoc.
-    /// </summary>
     static async Task init()
     {
         Console.Write("Please enter your location (ex: London, GB): ");
