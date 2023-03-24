@@ -1,16 +1,19 @@
-﻿namespace WeatherTerminal;
+﻿global using System;
+global using System.Threading.Tasks;
+global using System.Collections;
+global using System.Net.Http;
+global using Newtonsoft.Json;
 
-public static class lib
+
+namespace WeatherTerminal;
+
+partial class Program
 {
-    static HttpClient client = new HttpClient();
+    static readonly HttpClient client = new();
 
     static readonly string key = "f9d7dece96d2f9b77cc742253c2ae6d6";
 
-    /// <summary>
-    /// Call OpenWeather Geocoding API to get lon & lat. Must use ISO 3166 country codes.
-    /// </summary>
-    /// <param name="location">e.g. London,GB</param>
-    public static async Task GeoLoc(string location)
+    public static async Task GeoLoc(string? location)
     {
         string url = $"http://api.openweathermap.org/geo/1.0/direct?q={location}&appid={key}";
 
@@ -18,7 +21,30 @@ public static class lib
 
         dynamic? json = JsonConvert.DeserializeObject(responseBody);
 
-        Data.lat = json?[0]["lat"];
-        Data.lon = json?[0]["lon"];
+        lat = json?[0]["lat"];
+        lon = json?[0]["lon"];
+    }
+
+    public static async Task<ArrayList> Weather()
+    {
+        string url = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}";
+
+        string? responseBody = await client.GetStringAsync(url);
+
+        dynamic? json = JsonConvert.DeserializeObject(responseBody);
+
+        ArrayList weather = new()
+        {
+            $"Main: {json?["weather"][0]["main"]}\n",
+            $"Temperature:",
+            $"\tTemp: {(json?["main"]["temp"] - 273.15).ToString("#.##")} °C",
+            $"\tTemp High: {(json?["main"]["temp_min"] - 273.15).ToString("#.##")} °C",
+            $"\tTemp Low: {(json?["main"]["temp_max"] - 273.15).ToString("#.##")} °C",
+            $"Wind:",
+            $"\tWind Speed: {json?["wind"]["speed"]} km/h",
+            $"\tWind Direction: {json?["wind"]["deg"]} °",
+        };
+
+        return weather;
     }
 }
