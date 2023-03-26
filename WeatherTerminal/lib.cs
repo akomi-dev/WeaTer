@@ -1,11 +1,4 @@
-﻿global using System;
-global using System.Threading.Tasks;
-global using System.Collections;
-global using System.Net.Http;
-global using Newtonsoft.Json;
-
-
-namespace WeatherTerminal;
+﻿namespace WeatherTerminal;
 
 partial class Program
 {

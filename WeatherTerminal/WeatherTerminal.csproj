@@ -11,4 +11,12 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Using Include="System"/>
+		<Using Include="System.Threading.Tasks"/>
+		<Using Include="System.Collections"/>
+		<Using Include="System.Net.Http"/>
+		<Using Include="Newtonsoft.Json"/>
+	</ItemGroup>
+
 </Project>
