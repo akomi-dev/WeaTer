@@ -14,8 +14,8 @@ partial class Program
         {
             Console.WriteLine(item);
         }
-        Console.ReadLine();
-     }
+        Console.WriteLine();
+    }
 
     static async Task init()
     {

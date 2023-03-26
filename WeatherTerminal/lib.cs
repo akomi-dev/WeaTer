@@ -17,9 +17,7 @@ partial class Program
     {
         string url = $"http://api.openweathermap.org/geo/1.0/direct?q={location}&appid={key}";
 
-        string? responseBody = await client.GetStringAsync(url);
-
-        dynamic? json = JsonConvert.DeserializeObject(responseBody);
+        dynamic? json = JsonConvert.DeserializeObject(await client.GetStringAsync(url));
 
         lat = json?[0]["lat"];
         lon = json?[0]["lon"];
@@ -29,22 +27,18 @@ partial class Program
     {
         string url = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}";
 
-        string? responseBody = await client.GetStringAsync(url);
+        dynamic? json = JsonConvert.DeserializeObject(await client.GetStringAsync(url));
 
-        dynamic? json = JsonConvert.DeserializeObject(responseBody);
-
-        ArrayList weather = new()
+        return new()
         {
             $"Main: {json?["weather"][0]["main"]}\n",
             $"Temperature:",
-            $"\tTemp: {(json?["main"]["temp"] - 273.15).ToString("#.##")} °C",
-            $"\tTemp High: {(json?["main"]["temp_min"] - 273.15).ToString("#.##")} °C",
-            $"\tTemp Low: {(json?["main"]["temp_max"] - 273.15).ToString("#.##")} °C",
+            $"\tTemp: {(((json?["main"]["temp"] - 273.15) * (9/5)) + 32).ToString("#.##")} °F",
+            $"\tTemp High: {(((json?["main"]["temp_min"] - 273.15) * (9/5)) + 32).ToString("#.##")} °F",
+            $"\tTemp Low: {(((json?["main"]["temp_max"] - 273.15) * (9/5)) + 32).ToString("#.##")} °F",
             $"Wind:",
-            $"\tWind Speed: {json?["wind"]["speed"]} km/h",
+            $"\tWind Speed: {(json?["wind"]["speed"] / 1.609).ToString("#.##")} m/h",
             $"\tWind Direction: {json?["wind"]["deg"]} °",
         };
-
-        return weather;
     }
 }
